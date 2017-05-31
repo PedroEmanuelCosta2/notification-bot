@@ -1,4 +1,4 @@
-"""Bot exemple qui répond à @Killian Castella."""
+"""Bot exemple qui répond à @Pedro Costa."""
 
 import asyncio
 import json
@@ -15,23 +15,23 @@ HEADERS = {
 }
 
 async def api_call(path, method="GET", **kwargs):
-    """Effectue une  requête sur l'API REST de Discord."""
-    default = {"headers": HEADERS}
-    kwargs = dict(default, **kwargs)
-    with aiohttp.ClientSession() as session:
-        async with session.request(method, f"{URL}{path}", **kwargs) as response:
-            if 200 == response.status:
-                return await response.json()
-            elif 204 == response.status:
-                return {}
-            else:
-                body = await response.text()
-                raise AssertionError(f"{response.status} {response.reason} was unexpected.\n{body}")
+     """Effectue une  requête sur l'API REST de Discord."""
+     default = {"headers": HEADERS}
+     kwargs = dict(default, **kwargs)
+     with aiohttp.ClientSession() as session:
+         async with session.request(method, f"{URL}{path}", **kwargs) as response:
+             if 200 == response.status:
+                 return await response.json()
+             elif 204 == response.status:
+                 return {}
+             else:
+                 body = await response.text()
+                 raise AssertionError(f"{response.status} {response.reason} was unexpected.\n{body}")
 
 async def send_message(recipient_id, content):
-    """Envoie un message à l'utilisateur donné."""
-    channel = await api_call("/users/@me/channels", "POST", json={"recipient_id": recipient_id})
-    return await api_call(f"/channels/{channel['id']}/messages", "POST", json={"content": content})
+     """Envoie un message à l'utilisateur donné."""
+     channel = await api_call("/users/@me/channels", "POST", json={"recipient_id": recipient_id})
+     return await api_call(f"/channels/{channel['id']}/messages", "POST", json={"content": content})
 
 # Pas très joli, mais ça le fait.
 last_sequence = None
@@ -78,15 +78,14 @@ async def start(ws):
                         print(data['d'])
 
                         if data['d']['content'] == '?':
-
-                            task = asyncio.ensure_future(send_message(data['d']['author']['id'], 'Commandes disponibles...'))
+                            task = asyncio.ensure_future(send_message(data['d']['author']['id'],'Commandes disponibles...'))
 
                         if data['d']['content'] == 'quit':
-                            task = asyncio.ensure_future(send_message(data['d']['author']['id'], 'Bye Bye'))
+                            task = asyncio.ensure_future(send_message(data['d']['author']['id'],'Bye Bye !'))
                             # On l'attend l'envoi du message ci-dessus.
                             await asyncio.wait([task])
                             break
-                            
+
                     else:
                         print('Todo?', data['t'])
                 else:

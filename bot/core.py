@@ -76,15 +76,15 @@ async def start(ws):
                     last_sequence = data['s']
                     if data['t'] == "MESSAGE_CREATE":
                         print(data['d'])
-                        if data['d']['author']['username'] == 'Pedro Costa':
-                            task = asyncio.ensure_future(send_message(data['d']['author']['id'],
-                                                                      data['d']['content']))
+                        if data['d']['content'] == '?':
 
-                            if data['d']['content'] == 'quit':
-                                print('Bye bye!')
-                                # On l'attend l'envoi du message ci-dessus.
-                                await asyncio.wait([task])
-                                break
+                            task = asyncio.ensure_future(send_message(data['d']['author']['id'], 'Commandes disponibles...'))
+
+                        if data['d']['content'] == 'quit':
+                            task = asyncio.ensure_future(send_message(data['d']['author']['id'], 'Bye Bye'))
+                            # On l'attend l'envoi du message ci-dessus.
+                            await asyncio.wait([task])
+                            break
                     else:
                         print('Todo?', data['t'])
                 else:

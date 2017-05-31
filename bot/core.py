@@ -78,10 +78,10 @@ async def start(ws):
                         print(data['d'])
 
                         if data['d']['content'] == '?':
-                            task = asyncio.ensure_future(send_message(data['d']['author']['id'],'Commandes disponibles...'))
+                            await send_message(data['d']['author']['id'],'Commandes disponibles...')
 
                         if data['d']['content'] == 'quit':
-                            task = asyncio.ensure_future(send_message(data['d']['author']['id'],'Bye Bye !'))
+                            await send_message(data['d']['author']['id'],'Bye Bye !')
                             # On l'attend l'envoi du message ci-dessus.
                             await asyncio.wait([task])
                             break

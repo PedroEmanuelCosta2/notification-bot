@@ -1,4 +1,4 @@
-"""Bot exemple qui répond à @Pedro Costa."""
+"""Bot exemple qui répond à @Killian Castella."""
 
 import asyncio
 import json
@@ -76,6 +76,7 @@ async def start(ws):
                     last_sequence = data['s']
                     if data['t'] == "MESSAGE_CREATE":
                         print(data['d'])
+
                         if data['d']['content'] == '?':
 
                             task = asyncio.ensure_future(send_message(data['d']['author']['id'], 'Commandes disponibles...'))
@@ -85,6 +86,7 @@ async def start(ws):
                             # On l'attend l'envoi du message ci-dessus.
                             await asyncio.wait([task])
                             break
+                            
                     else:
                         print('Todo?', data['t'])
                 else:

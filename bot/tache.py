@@ -26,3 +26,21 @@ class Tache:
     @property
     def fileName(self):
         return self._fileName
+        
+    def to_json(obj):
+    #code from http://sdz.tdct.org/sdz/serialisez-vos-objets-au-format-json.html
+    if isinstance(obj, Tache):
+        return {"__class__": "Tache",
+                "name": obj.name,
+                "description": obj.description,
+                "timestamp" : obj.timestamp,
+                "owner" : obj.owner}
+    raise TypeError(repr(obj) + " is not serializable")
+   
+    def from_json(obj_dict):
+    #code from http://sdz.tdct.org/sdz/serialisez-vos-objets-au-format-json.html
+    if "__class__" in obj_dict:
+        if obj_dict["__class__"] == "Tache":
+            obj = Tache(obj_dict["name"], obj_dict["description"], obj_dict["timestamp"], obj_dict["owner"])
+            return obj
+    return obj_dict

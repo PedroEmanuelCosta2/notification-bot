@@ -1,30 +1,16 @@
 import json
-from tache import *
+from .tache import Tache
 import os.path
 
-def checkIfFileExist(fname):
-    if(os.path.isfile(fname)):
-        return True
-    else:
-        return False
-
 def handleTask(tache):
-    if(checkIfFileExist(tache.fileName)):
-        print("le fichier existe")
+    if(os.path.isfile(tache.fileName)):
+        #le fichier existe
         with open(tache.fileName, 'w', encoding='utf-8') as f:
             json.dumps(tache.__dict__,f)
     else:
-        print("le fichier n'existe pas : " + tache.fileName )
+        #le fichier n'existe pas
         
-def serializer(obj):
-#code from http://sdz.tdct.org/sdz/serialisez-vos-objets-au-format-json.html
-    if isinstance(obj, Tache):
-        return {"__class__": "Tache",
-                "name": obj.name,
-                "description": obj.description,
-                "timestamp" : obj.timestamp,
-                "owner" : obj.owner}
-    raise TypeError(repr(obj) + " is not serializable")
+
 
 def deserializer(obj_dict):
 #code from http://sdz.tdct.org/sdz/serialisez-vos-objets-au-format-json.html
@@ -34,6 +20,7 @@ def deserializer(obj_dict):
             return obj
     return objet
 
+    
         
 tache =  Tache("Hello","description",12031212,"paul")
 dict = serializer(tache)

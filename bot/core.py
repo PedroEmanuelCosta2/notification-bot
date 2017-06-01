@@ -1,4 +1,4 @@
-"""Bot exemple qui répond à @Pedro Costa."""
+"""Bot de notifications."""
 
 import asyncio
 import json

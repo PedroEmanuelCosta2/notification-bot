@@ -3,8 +3,11 @@
 import asyncio
 import json
 import zlib
+import shlex
 
 import aiohttp
+
+from main import new, store
 
 TOKEN = 'MzE0MzIwNjc1Mjc3ODk3NzI5.C_2fcA.jbEjfZ-dxy_SOFC-e8JHXgYCiIg'
 
@@ -77,13 +80,27 @@ async def start(ws):
                     if data['t'] == "MESSAGE_CREATE":
                         print(data['d'])
 
-                        if data['d']['content'] == '?':
+                        if data['d']['content'] == '?help':
                             await send_message(data['d']['author']['id'],'Commandes disponibles...')
 
-                        if data['d']['content'] == 'quit':
+                        if '?new' in data['d']['content']:
+                            argument = shlex.split(data['d']['content'])
+
+                            if len(argument) != 4:
+                                await send_message(data['d']['author']['id'],'Veuillez entrez un titre, une description et un date')
+                            else:
+                                new(data['d']['author']['id'], argument[1], argument[2], argument[3])
+                                await send_message(data['d']['author']['id'],"Votre tâche "+ argument[1] + "a bien été créée !")
+
+                        #if '?update' in data['d']['content']:
+
+                        #if '?delete' in data['d']['content']:
+
+                        #if '?list' in data['d']['content']:
+
+                        if data['d']['content'] == '?quit':
+                            store()
                             await send_message(data['d']['author']['id'],'Bye Bye !')
-                            # On l'attend l'envoi du message ci-dessus.
-                            await asyncio.wait([task])
                             break
 
                     else:

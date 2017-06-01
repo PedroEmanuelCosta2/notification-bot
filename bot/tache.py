@@ -1,26 +1,25 @@
 class Tache:
 
     def __init__(self, name, description, timestamp, owner):
-        self._name = name
-        self._description = description
-        self._timestamp = timestamp
-        self._owner = owner
-        self._fileName = owner + ".json"
+        self.name = name
+        self.description = description
+        self.timestamp = timestamp
+        self.owner = owner
+        self.fileName = owner + ".json"
 
-    def to_json(obj):
+    def to_json(self):
     #code from http://sdz.tdct.org/sdz/serialisez-vos-objets-au-format-json.html
-    if isinstance(obj, Tache):
         return {"__class__": "Tache",
-                "name": obj.name,
-                "description": obj.description,
-                "timestamp" : obj.timestamp,
-                "owner" : obj.owner}
-    raise TypeError(repr(obj) + " is not serializable")
+                "name": self.name,
+                "description": self.description,
+                "timestamp" : self.timestamp,
+                "owner" : self.owner}
 
+    @staticmethod
     def from_json(obj_dict):
     #code from http://sdz.tdct.org/sdz/serialisez-vos-objets-au-format-json.html
-    if "__class__" in obj_dict:
-        if obj_dict["__class__"] == "Tache":
-            obj = Tache(obj_dict["name"], obj_dict["description"], obj_dict["timestamp"], obj_dict["owner"])
-            return obj
-    return obj_dict
+        if "__class__" in obj_dict:
+            if obj_dict["__class__"] == "Tache":
+                obj = Tache(obj_dict["name"], obj_dict["description"], obj_dict["timestamp"], obj_dict["owner"])
+                return obj
+        return obj_dict

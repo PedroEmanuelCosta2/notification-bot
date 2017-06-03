@@ -1,6 +1,6 @@
 class Tache:
-    def __init__(self, name, description, timestamp, owner):
+    def __init__(self, name, description, time, owner):
         self.name = name
         self.description = description
-        self.timestamp = timestamp
+        self.time = time
         self.owner = owner

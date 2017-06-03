@@ -7,7 +7,7 @@ import shlex
 
 import aiohttp
 
-from main import new, store, load, update
+from main import new, store, load, update, list, detail, help
 
 TOKEN = 'MzE0MzIwNjc1Mjc3ODk3NzI5.C_2fcA.jbEjfZ-dxy_SOFC-e8JHXgYCiIg'
 
@@ -82,7 +82,8 @@ async def start(ws):
                         print(data['d'])
 
                         if data['d']['content'] == '?help':
-                            await send_message(data['d']['author']['id'],'Commandes disponibles...')
+                            helpMsg = help()
+                            await send_message(data['d']['author']['id'],helpMsg)
 
                         if '?new' in data['d']['content']:
                             argument = shlex.split(data['d']['content'])
@@ -104,7 +105,14 @@ async def start(ws):
 
                         #if '?delete' in data['d']['content']:
 
-                        #if '?list' in data['d']['content']:
+                        if '?list' in data['d']['content']:
+                            tacheList=list(data['d']['author']['id'])
+                            await send_message(data['d']['author']['id'],tacheList)
+                         
+                        if '?detail' in data['d']['content']:
+                            argument = shlex.split(data['d']['content'])
+                            details = detail(data['d']['author']['id'],argument[1])
+                            await send_message(data['d']['author']['id'],details)
 
                         if data['d']['content'] == '?quit':
                             store()

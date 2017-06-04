@@ -6,62 +6,6 @@
             "description": "d2",
             "time": "2",
             "owner": "283996489284452352"
-        },
-        {
-            "__class__": "Tache",
-            "name": "t2",
-            "description": "d3",
-            "time": "3",
-            "owner": "283996489284452352"
-        },
-        {
-            "__class__": "Tache",
-            "name": "t3",
-            "description": "d4",
-            "time": "4",
-            "owner": "283996489284452352"
-        },
-        {
-            "__class__": "Tache",
-            "name": "t5",
-            "description": "d5",
-            "time": "5",
-            "owner": "283996489284452352"
-        },
-        {
-            "__class__": "Tache",
-            "name": "t6",
-            "description": "d6",
-            "time": "6",
-            "owner": "283996489284452352"
-        },
-        {
-            "__class__": "Tache",
-            "name": "t7",
-            "description": "d7",
-            "time": "7",
-            "owner": "283996489284452352"
-        },
-        {
-            "__class__": "Tache",
-            "name": "t8",
-            "description": "d8",
-            "time": "8",
-            "owner": "283996489284452352"
-        },
-        {
-            "__class__": "Tache",
-            "name": "t9",
-            "description": "d9",
-            "time": "9",
-            "owner": "283996489284452352"
-        },
-        {
-            "__class__": "Tache",
-            "name": "t0",
-            "description": "d0",
-            "time": "0",
-            "owner": "283996489284452352"
-        }
+        }        
     ]
 }

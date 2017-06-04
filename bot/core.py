@@ -5,11 +5,14 @@ import json
 import zlib
 import shlex
 import time
+import param
 
 import aiohttp
 
+from datetime import datetime
 from main import new, store, load, update, listTask, detail, helpTask, delete
-from param import TOKEN
+
+TOKEN = param.TOKEN
 
 URL = "https://discordapp.com/api"
 HEADERS = {
@@ -93,9 +96,9 @@ async def start(ws):
                             if len(arguments) != 4:
                                 await send_message(data['d']['author']['id'],'Veuillez entrez un titre, une description et une date')
                             else:
-                                new(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
-                                #date = dateToTimestamp(arguments[3])
-                                await send_message(data['d']['author']['id'],f"Votre tâche {arguments[1]} a bien été créée et vous sera rappelée le {arguments[3]} !")
+                                newMsg = new(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
+                                await send_message(data['d']['author']['id'],newMsg)
+                                await rappel(data['d']['author']['id'], arguments[1],arguments[3])
 
                         if '?update' in data['d']['content']:
                             arguments = shlex.split(data['d']['content'])
@@ -131,13 +134,21 @@ async def start(ws):
                 else:
                     print("Unknown?", data)
 
-def callback():
-    #print(f"RAPPEL ! Il est temps ({arguments[3]}) de faire votre tâche : {arguments[1]}")
-    print("putain de merde de cul")
+def callback(owner, name, date):
+    asyncio.ensure_future(send_message(owner,f"RAPPEL ! Il est temps ({date}) de faire votre tâche : {name}"))
 
-async def main2(loop):
-    now = loop.time()
-    loop.call_at( now + 0.02, callback)
+async def rappel(owner, name, date):
+    nowLoop = loop.time()
+    nowTime = time.time()
+
+    try:
+      dateTask = datetime.strptime(date,"%d/%m/%Y %H:%M")
+    except:
+      print("Error converting time into timestamp")
+
+    delta = dateTask.timestamp() - nowTime
+
+    loop.call_at( nowLoop+delta, callback, owner, name, date)
 
 async def main():
     response = await api_call('/gateway')

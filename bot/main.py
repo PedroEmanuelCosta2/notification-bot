@@ -1,6 +1,7 @@
 import json
 from tache import Tache
 from collections import defaultdict
+from datetime import datetime
 from math import ceil
 import os.path
 
@@ -23,15 +24,21 @@ def to_json(obj):
         "owner" : obj.owner}
 
 def new(owner, title, description, date):
-    #TODO Test all args dateFormat for date
-    user_dict[owner].append(Tache(title,description,date,owner))
-    #return str
+    try:
+        dateTask = datetime.strptime(date,"%d/%m/%Y %H:%M")
+        user_dict[owner].append(Tache(title,description,date,owner))
+        return f"La tâche : {title} a bien été créée et vous sera rappelée le {date} !"
+    except:
+        return f"Création de tache impossible, vous devez absolument respecter le format de date suivant :\n\t \"dd\\mm\\yyyy hh:mm\""
 
 def delete(owner, id_u):
-    d = ceil(int(id_u))
-    name = user_dict[owner][d].name
-    del user_dict[owner][d]
-    return f"La tâche : {name} a bien été supprimée !"
+    try:
+        d = ceil(int(id_u))
+        name = user_dict[owner][d].name
+        del user_dict[owner][d]
+        return f"La tâche : {name} a bien été supprimée !"
+    except:
+        return f"Impossible de supprimer la tâche : {name}"
 
 def update(owner,id_u,attributeUpdated,newValue):
     try:
@@ -46,15 +53,16 @@ def update(owner,id_u,attributeUpdated,newValue):
                 user_dict[owner][d]=Tache(user_dict[owner][d].name,newValue,user_dict[owner][d].time,owner)
                 strResult=f"Tache {name} modifiée avec succès"
             elif attributeLow=='time' :
-                #TODO
-                #convert time
-                #change next line
-                user_dict[owner][d]=Tache(user_dict[owner][d].name,user_dict[owner][d].description,user_dict[owner][d].time,owner)
-                strResult=f"Tache {name} modifiée avec succès"
+                try:
+                    dateTask = datetime.strptime(newValue,"%d/%m/%Y %H:%M")
+                    user_dict[owner][d]=Tache(user_dict[owner][d].name,user_dict[owner][d].description,newValue,owner)
+                    strResult=f"Tache {name} modifiée avec succès"
+                except:
+                   strResult="Mise a jour de la tache impossible, vous devez absolument respecter le format de date suivant :\n\t \"dd\\mm\\yyyy hh:mm\""
             else:
                 strResult="Champ inexistant Essayez :name | description | time"
         else:
-            strResult="Numéro de tache non valide.\n?list pour voir le tache disponible."
+            strResult="Numéro de tache non valide.\nlist pour voir le tache disponible."
     except ValueError:
         strResult="Le numéro de tache doit être une valeur numérique"
     return strResult
@@ -70,10 +78,6 @@ def listTask(owner):
         strResult=f"Vous n'avez actuellement aucune tâche, créer en une avec new"
     return strResult
 
-def dateFormat(StrDate):
-    #TODO check if date format is valid
-    return true
-
 def helpTask():
     return f"Liste des commandes :\n\n\tCreate a new task :\n\tnew \"Name\" \"Description\" \"Date\"\n\n\tChange one attribute of a task : \n\tupdate \"name | description | time\" \"new value\"\n\n\tObtain the list of all your tasks :\n\tlist\n\n\tObtain the details of a task :\n\tdetail tasknumber\n\n\tDelete a task :\n\tdelete tasknumber"
 
@@ -87,11 +91,6 @@ def detail(owner,id):
     except ValueError:
         strResult="Veuillez entrer un valeur numérique"
     return strResult
-
-# def dateToTimestamp(date_str):
-#
-#
-# def timestampToDate(date_float):
 
 
 def store():

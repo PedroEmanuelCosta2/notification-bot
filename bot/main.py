@@ -67,7 +67,7 @@ def listTask(owner):
             strResult +=f"\t{i}\t{tache.name}\n"
             i+=1
     else:
-        strResult=f"Vous n'avez actuellement aucune tâche, créer en une avec ?new"
+        strResult=f"Vous n'avez actuellement aucune tâche, créer en une avec new"
     return strResult
 
 def dateFormat(StrDate):
@@ -86,7 +86,7 @@ def detail(owner,id):
             strResult="Numéro de tache non valide.\nlist pour voir le tache disponible."
     except ValueError:
         strResult="Veuillez entrer un valeur numérique"
-    return strResult    
+    return strResult
 
 # def dateToTimestamp(date_str):
 #

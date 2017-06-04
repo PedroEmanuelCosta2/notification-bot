@@ -9,8 +9,7 @@ import time
 import aiohttp
 
 from main import new, store, load, update, listTask, detail, helpTask, delete
-
-TOKEN = 'MzE0MzIwNjc1Mjc3ODk3NzI5.C_2fcA.jbEjfZ-dxy_SOFC-e8JHXgYCiIg'
+from param import TOKEN
 
 URL = "https://discordapp.com/api"
 HEADERS = {
@@ -59,7 +58,7 @@ async def identify(ws):
                               'compress': True,  # implique le bout de code lié à zlib, pas nécessaire.
                               'large_threshold': 250}})
 
-async def start(ws, loop):
+async def start(ws):
     """Lance le bot sur l'adresse Web Socket donnée."""
     global last_sequence  # global est nécessaire pour modifier la variable
     with aiohttp.ClientSession() as session:
@@ -97,8 +96,6 @@ async def start(ws, loop):
                                 new(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
                                 #date = dateToTimestamp(arguments[3])
                                 await send_message(data['d']['author']['id'],f"Votre tâche {arguments[1]} a bien été créée et vous sera rappelée le {arguments[3]} !")
-                                now = time.time()
-                                loop.call_at( now + 0.02, lambda : print(f"RAPPEL ! Il est temps ({arguments[3]}) de faire votre tâche : {arguments[1]}"))
 
                         if '?update' in data['d']['content']:
                             arguments = shlex.split(data['d']['content'])
@@ -134,13 +131,20 @@ async def start(ws, loop):
                 else:
                     print("Unknown?", data)
 
-async def main(loop):
-    response = await api_call('/gateway')
-    await start(response['url'],loop)
+def callback():
+    #print(f"RAPPEL ! Il est temps ({arguments[3]}) de faire votre tâche : {arguments[1]}")
+    print("putain de merde de cul")
 
+async def main2(loop):
+    now = loop.time()
+    loop.call_at( now + 0.02, callback)
+
+async def main():
+    response = await api_call('/gateway')
+    await start(response['url'])
 
 # Lancer le programme.
 loop = asyncio.get_event_loop()
 loop.set_debug(True)
-loop.run_until_complete(main(loop))
+loop.run_until_complete(main())
 loop.close()

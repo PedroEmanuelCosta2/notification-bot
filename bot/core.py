@@ -10,7 +10,7 @@ import param
 import aiohttp
 
 from datetime import datetime
-from main import new, store, load, update, listTask, detail, helpTask, delete
+from main import new, store, load, update, listTask, detail, helpTask, delete, user_dict
 
 TOKEN = param.TOKEN
 
@@ -20,6 +20,7 @@ HEADERS = {
     "User-Agent": "DiscordBot (http://he-arc.ch/, 0.1)"
 }
 
+listeRappel = []
 load()
 
 async def api_call(path, method="GET", **kwargs):
@@ -98,7 +99,9 @@ async def start(ws):
                             else:
                                 newMsg = new(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
                                 await send_message(data['d']['author']['id'],newMsg)
-                                await rappel(data['d']['author']['id'], arguments[1],arguments[3])
+                                task = rappel(data['d']['author']['id'], arguments[1],arguments[3])
+                                await task
+                                listeRappel.append(task)
 
                         if '?update' in data['d']['content']:
                             arguments = shlex.split(data['d']['content'])
@@ -114,6 +117,7 @@ async def start(ws):
                             arguments = shlex.split(data['d']['content'])
                             deleteMsg = delete(data['d']['author']['id'], arguments[1])
                             await send_message(data['d']['author']['id'],deleteMsg)
+                            #listeRappel[int(arguments[1])].cancel()
 
                         if '?list' in data['d']['content']:
                             tacheList=listTask(data['d']['author']['id'])
@@ -134,6 +138,13 @@ async def start(ws):
                 else:
                     print("Unknown?", data)
 
+async def loadTask():
+    for id_o in user_dict:
+        for tache in user_dict[id_o]:
+            task = rappel(tache.owner, tache.name, tache.time)
+            await task
+            listeRappel.append(task)
+
 def callback(owner, name, date):
     asyncio.ensure_future(send_message(owner,f"RAPPEL ! Il est temps ({date}) de faire votre tâche : {name}"))
 
@@ -152,6 +163,7 @@ async def rappel(owner, name, date):
 
 async def main():
     response = await api_call('/gateway')
+    await loadTask()
     await start(response['url'])
 
 # Lancer le programme.

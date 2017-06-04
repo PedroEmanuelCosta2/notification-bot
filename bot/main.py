@@ -8,7 +8,6 @@ import os.path
 user_dict = defaultdict(list)
 
 def from_json(obj_dict):
-    global user_dict2
     if "__class__" in obj_dict:
         if obj_dict["__class__"] == "Tache":
             obj = Tache(obj_dict["name"], obj_dict["description"], obj_dict["time"], obj_dict["owner"])
@@ -106,4 +105,4 @@ def load():
             json.load(fichier, object_hook=from_json)
     except IOError as e:
         #nothing will be loaded
-        print("I/O error({0}): {1}".format(e.errno, e.strerror))
+        print("I/O error({0}): {1}".format(e.errno, e.strerror))        

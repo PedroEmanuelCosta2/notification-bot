@@ -8,6 +8,7 @@ src
 
 # python
 __pycache__
+param.py
 
 # pip
 pip-selfcheck.json

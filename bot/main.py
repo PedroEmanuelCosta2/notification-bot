@@ -75,7 +75,7 @@ def dateFormat(StrDate):
     return true
 
 def helpTask():
-    return f"Liste des commandes :\n\n\tCreate a new task :\n\t?new \"Name\" \"Description\" \"Date\"\n\n\tChange one attribute of a task : \n\t?update \"name | description | time\" \"new value\"\n\n\tObtain the list of all your tasks :\n\t?list\n\n\tObtain the details of a task :\n\t?detail tasknumber\n\n\tDelete a task :\n\t?delete tasknumber"
+    return f"Liste des commandes :\n\n\tCreate a new task :\n\tnew \"Name\" \"Description\" \"Date\"\n\n\tChange one attribute of a task : \n\tupdate \"name | description | time\" \"new value\"\n\n\tObtain the list of all your tasks :\n\tlist\n\n\tObtain the details of a task :\n\tdetail tasknumber\n\n\tDelete a task :\n\tdelete tasknumber"
 
 def detail(owner,id):
     try:
@@ -83,13 +83,10 @@ def detail(owner,id):
         if(len(user_dict[owner])>0 and d>=0 and d<len(user_dict[owner])):
             strResult=f"Détails de la tache {d} :\n\tDescription :\n\t\t{user_dict[owner][d].description}\n\tDate du rappel:\n\t\t{user_dict[owner][d].time}\ncette tache peut à tout moment être éditée grace à la commande ?update."
         else:
-            strResult="Numéro de tache non valide.\n?list pour voir le tache disponible."
+            strResult="Numéro de tache non valide.\nlist pour voir le tache disponible."
     except ValueError:
         strResult="Veuillez entrer un valeur numérique"
-    return strResult
-
-# def callback(name, date):
-#     print(f"RAPPEL ! Il est temps ({date}) de faire votre tâche : {name}")
+    return strResult    
 
 # def dateToTimestamp(date_str):
 #

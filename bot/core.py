@@ -4,10 +4,11 @@ import asyncio
 import json
 import zlib
 import shlex
+import time
 
 import aiohttp
 
-from main import new, store, load, update, listTask, detail, helpTask, delete#, callback
+from main import new, store, load, update, listTask, detail, helpTask, delete
 
 TOKEN = 'MzE0MzIwNjc1Mjc3ODk3NzI5.C_2fcA.jbEjfZ-dxy_SOFC-e8JHXgYCiIg'
 
@@ -58,7 +59,7 @@ async def identify(ws):
                               'compress': True,  # implique le bout de code lié à zlib, pas nécessaire.
                               'large_threshold': 250}})
 
-async def start(ws):
+async def start(ws, loop):
     """Lance le bot sur l'adresse Web Socket donnée."""
     global last_sequence  # global est nécessaire pour modifier la variable
     with aiohttp.ClientSession() as session:
@@ -96,15 +97,15 @@ async def start(ws):
                                 new(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
                                 #date = dateToTimestamp(arguments[3])
                                 await send_message(data['d']['author']['id'],f"Votre tâche {arguments[1]} a bien été créée et vous sera rappelée le {arguments[3]} !")
-                                #taskMsg = loop.call_at(now + 0.2, callback, arguments[1], arguments[3])
-                                #await send_message(data['d']['author']['id'], taskMsg)
+                                now = time.time()
+                                loop.call_at( now + 0.02, lambda : print(f"RAPPEL ! Il est temps ({arguments[3]}) de faire votre tâche : {arguments[1]}"))
 
                         if '?update' in data['d']['content']:
                             arguments = shlex.split(data['d']['content'])
 
                             if len(arguments) != 4:
-                                await send_message(data['d']['author']['id'],'Veuillez entrez l\'id de votre tâche, le champ que vous souhaitez changer et la nouvelle valeur.')
-                                await send_message(data['d']['author']['id'],"Exemple : ?update 0 name NewName")
+                                await send_message(data['d']['author']['id'],f"Veuillez entrez l'id de votre tâche, le champ que vous souhaitez changer et la nouvelle valeur.")
+                                await send_message(data['d']['author']['id'],f"Exemple : update 0 name NewName")
                             else:
                                 updateMsg = update(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
                                 await send_message(data['d']['author']['id'],updateMsg)
@@ -133,14 +134,13 @@ async def start(ws):
                 else:
                     print("Unknown?", data)
 
-
-async def main():
+async def main(loop):
     response = await api_call('/gateway')
-    await start(response['url'])
+    await start(response['url'],loop)
 
 
 # Lancer le programme.
 loop = asyncio.get_event_loop()
 loop.set_debug(True)
-loop.run_until_complete(main())
+loop.run_until_complete(main(loop))
 loop.close()

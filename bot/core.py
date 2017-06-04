@@ -139,6 +139,7 @@ async def start(ws):
                     print("Unknown?", data)
 
 async def loadTask():
+    """Fonction qui charge les rappels de toutes les taches."""
     for id_o in user_dict:
         for tache in user_dict[id_o]:
             task = rappel(tache.owner, tache.name, tache.time)
@@ -146,9 +147,11 @@ async def loadTask():
             listeRappel.append(task)
 
 def callback(owner, name, date):
+    """Fonction qui affiche le message de rappel."""
     asyncio.ensure_future(send_message(owner,f"RAPPEL ! Il est temps ({date}) de faire votre tâche : {name}"))
 
 async def rappel(owner, name, date):
+    """Fonction qui permet de mettre en place le message de rappel à la date donnée à l'aide de la fonction call_at."""
     nowLoop = loop.time()
     nowTime = time.time()
 
@@ -162,6 +165,7 @@ async def rappel(owner, name, date):
     loop.call_at( nowLoop+delta, callback, owner, name, date)
 
 async def main():
+    """Fonction main principale, lance le bot avec start."""
     response = await api_call('/gateway')
     await loadTask()
     await start(response['url'])

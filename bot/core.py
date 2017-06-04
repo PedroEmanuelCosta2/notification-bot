@@ -7,7 +7,7 @@ import shlex
 
 import aiohttp
 
-from main import new, store, load, update, list, detail, help
+from main import new, store, load, update, listTask, detail, helpTask
 
 TOKEN = 'MzE0MzIwNjc1Mjc3ODk3NzI5.C_2fcA.jbEjfZ-dxy_SOFC-e8JHXgYCiIg'
 
@@ -82,36 +82,36 @@ async def start(ws):
                         print(data['d'])
 
                         if data['d']['content'] == '?help':
-                            helpMsg = help()
+                            helpMsg = helpTask()
                             await send_message(data['d']['author']['id'],helpMsg)
 
                         if '?new' in data['d']['content']:
-                            argument = shlex.split(data['d']['content'])
+                            arguments = shlex.split(data['d']['content'])
 
-                            if len(argument) != 4:
+                            if len(arguments) != 4:
                                 await send_message(data['d']['author']['id'],'Veuillez entrez un titre, une description et un date')
                             else:
-                                new(data['d']['author']['id'], argument[1], argument[2], argument[3])
-                                await send_message(data['d']['author']['id'],f"Votre tâche {argument[1]} a bien été créée et vous sera rappelée le {argument[3]} !")
+                                new(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
+                                await send_message(data['d']['author']['id'],f"Votre tâche {arguments[1]} a bien été créée et vous sera rappelée le {arguments[3]} !")
 
                         if '?update' in data['d']['content']:
-                            argument = shlex.split(data['d']['content'])
+                            arguments = shlex.split(data['d']['content'])
 
-                            if len(argument) != 4:
+                            if len(arguments) != 3:
                                 await send_message(data['d']['author']['id'],'Veuillez réentrez un titre, une description et un date')
                             else:
-                                update(data['d']['author']['id'], argument[1], argument[2], argument[3])
-                                await send_message(data['d']['author']['id'],f"Votre tâche {argument[1]} a bien été mise à jour !")
+                                update(data['d']['author']['id'], arguments[1], arguments[2])
+                                await send_message(data['d']['author']['id'],f"Votre tâche {arguments[1]} a bien été mise à jour !")
 
                         #if '?delete' in data['d']['content']:
 
                         if '?list' in data['d']['content']:
-                            tacheList=list(data['d']['author']['id'])
+                            tacheList=listTask(data['d']['author']['id'])
                             await send_message(data['d']['author']['id'],tacheList)
                          
                         if '?detail' in data['d']['content']:
-                            argument = shlex.split(data['d']['content'])
-                            details = detail(data['d']['author']['id'],argument[1])
+                            arguments = shlex.split(data['d']['content'])
+                            details = detail(data['d']['author']['id'],arguments[1])
                             await send_message(data['d']['author']['id'],details)
 
                         if data['d']['content'] == '?quit':

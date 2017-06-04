@@ -27,39 +27,59 @@ def new(owner, title, description, date):
     user_dict[owner].append(Tache(title,description,date,owner))
     #return str
 
-def update(owner, title, description, date):
-    #TODO Test all args dateFormat for date
-    user_dict[owner] = Tache(title,description,date,owner)
-    #return str
+def update(owner,id,attributeUpdated,newValue):
+    try: 
+        d=ceil(int(id))
+        attributeLow = attributeUpdated.lower()
+        if(len(user_dict[owner])>0 and d>=0 and d<len(user_dict[owner])):
+            if(attributeLow=='name')
+                user_dict[owner][d]=Tache(newValue,user_dict[owner][d].description,user_dict[owner][d].time,owner)
+                strResult="Tache modifiée avec succès"
+            elif(attributeLow=='description'):
+                user_dict[owner][d]=Tache(user_dict[owner][d].name,newValue,user_dict[owner][d].time,owner)
+                strResult="Tache modifiée avec succès"
+            elif(attributeLow=='time'):
+                #TODO
+                #convert time
+                #change next line
+                user_dict[owner][d]=Tache(user_dict[owner][d].name,user_dict[owner][d].description,user_dict[owner][d].time,owner)
+                strResult="Tache modifiée avec succès"
+            else:
+                strResult="Champ inexistant Essayez :name | description | time"
+        else:
+            strResult="Numéro de tache non valide.\n?list pour voir le tache disponible."
+    except ValueError:
+        strResult="Le numéro de tache doit être une valeur numérique"
+    return strResult
    
-def list(owner):
+def listTask(owner):
     if(len(user_dict[owner])>0):
-        str="Voici la liste de vos taches :\n\n"
+        strResult="Voici la liste de vos taches :\n\n"
         i=0
         for tache in user_dict[owner]:
-            str +="\t%s\t%s\n"%(i,tache.name)
+            strResult +="\t%s\t%s\n"%(i,tache.name)
             i+=1
     else:
-        str="Vous n'avez actuellement aucune tâche, créer en une avec ?new"
-    return str
+        strResult="Vous n'avez actuellement aucune tâche, créer en une avec ?new"
+    return strResult
 
 def dateFormat(StrDate):
     #TODO check if date format is valid
     return true
 
-def help():
+def helpTask():
     return "Liste des commandes :\n\n\tCreate a new task :\n\t?new \"Name\" \"Description\" \"Date\"\n\n\tChange one attribute of a task : \n\t?update \"name | description | time\" \"new value\"\n\n\tObtain the list of all your tasks :\n\t?list\n\n\tObtain the details of a task :\n\t?detail tasknumber\n\n\tDelete a task :\n\t?delete tasknumber"
     
 def detail(owner,id):
     try: 
         d=ceil(int(id))
         if(len(user_dict[owner])>0 and d>=0 and d<len(user_dict[owner])):
-            str="Détails de la tache %s :\n\tDescription :\n\t\t%s\n\tDate du rappel:\n\t\t%s\ncette tache peut à tout moment être éditée grace à la commande ?update."%(id,user_dict[owner].description,user_dict[owner].time)
+            strResult="Détails de la tache %s :\n\tDescription :\n\t\t%s\n\tDate du rappel:\n\t\t%s\ncette tache peut à tout moment être éditée grace à la commande ?update."%(id,user_dict[owner][d].description,user_dict[owner][d].time)
         else:
-            str="Numéro de tache non valide.\n?list pour voir le tache disponible."
+            strResult="Numéro de tache non valide.\n?list pour voir le tache disponible."
     except ValueError:
-        str="Veuillez entrer un valeur numérique"
-    return str
+        strResult="Veuillez entrer un valeur numérique"
+    return strResult
     
 def store():
     try:

@@ -5,12 +5,13 @@ import json
 import zlib
 import shlex
 import time
+import param
 
 import aiohttp
 
 from main import new, store, load, update, listTask, detail, helpTask, delete
 
-TOKEN = 'MzE0MzIwNjc1Mjc3ODk3NzI5.C_2fcA.jbEjfZ-dxy_SOFC-e8JHXgYCiIg'
+TOKEN = param.TOKEN
 
 URL = "https://discordapp.com/api"
 HEADERS = {
@@ -94,9 +95,8 @@ async def start(ws, loop):
                             if len(arguments) != 4:
                                 await send_message(data['d']['author']['id'],'Veuillez entrez un titre, une description et une date')
                             else:
-                                new(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
-                                #date = dateToTimestamp(arguments[3])
-                                await send_message(data['d']['author']['id'],f"Votre tâche {arguments[1]} a bien été créée et vous sera rappelée le {arguments[3]} !")
+                                newMsg = new(data['d']['author']['id'], arguments[1], arguments[2], arguments[3])
+                                await send_message(data['d']['author']['id'],newMsg)
                                 now = time.time()
                                 loop.call_at( now + 0.02, lambda : print(f"RAPPEL ! Il est temps ({arguments[3]}) de faire votre tâche : {arguments[1]}"))
 

@@ -31,7 +31,7 @@ def update(owner, title, description, date):
     #TODO Test all args dateFormat for date
     user_dict[owner] = Tache(title,description,date,owner)
     #return str
-   
+
 def list(owner):
     if(len(user_dict[owner])>0):
         str="Voici la liste de vos taches :\n\n"
@@ -49,9 +49,9 @@ def dateFormat(StrDate):
 
 def help():
     return "Liste des commandes :\n\n\tCreate a new task :\n\t?new \"Name\" \"Description\" \"Date\"\n\n\tChange one attribute of a task : \n\t?update \"name | description | time\" \"new value\"\n\n\tObtain the list of all your tasks :\n\t?list\n\n\tObtain the details of a task :\n\t?detail tasknumber\n\n\tDelete a task :\n\t?delete tasknumber"
-    
+
 def detail(owner,id):
-    try: 
+    try:
         d=ceil(int(id))
         if(len(user_dict[owner])>0 and d>=0 and d<len(user_dict[owner])):
             str="Détails de la tache %s :\n\tDescription :\n\t\t%s\n\tDate du rappel:\n\t\t%s\ncette tache peut à tout moment être éditée grace à la commande ?update."%(id,user_dict[owner].description,user_dict[owner].time)
@@ -60,14 +60,14 @@ def detail(owner,id):
     except ValueError:
         str="Veuillez entrer un valeur numérique"
     return str
-    
+
 def store():
     try:
         with open('TasksList.json', 'w', encoding='utf-8') as f:
             json.dump(user_dict, f, indent=4, default=to_json)
     except IOError as e:
         print("I/O error({0}): {1}".format(e.errno, e.strerror))
-        
+
 def load():
     try:
         with open("TasksList.json", "r", encoding="utf-8") as fichier:

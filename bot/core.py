@@ -108,7 +108,7 @@ async def start(ws):
                         if '?list' in data['d']['content']:
                             tacheList=list(data['d']['author']['id'])
                             await send_message(data['d']['author']['id'],tacheList)
-                         
+
                         if '?detail' in data['d']['content']:
                             argument = shlex.split(data['d']['content'])
                             details = detail(data['d']['author']['id'],argument[1])
